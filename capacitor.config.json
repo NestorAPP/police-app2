@@ -1,0 +1,6 @@
+{
+  "appId": "ru.mvd.fitness",
+  "appName": "Физподготовка МВД",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}

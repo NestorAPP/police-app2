@@ -1,0 +1,13 @@
+{
+  "name": "mvd-fitness",
+  "version": "1.0.0",
+  "description": "Физподготовка МВД",
+  "main": "index.html",
+  "author": "MVD Fitness Team",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/core": "^6.0.0"
+  }
+}
