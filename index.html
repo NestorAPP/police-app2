@@ -2,32 +2,106 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d2238">
   <title>Физподготовка МВД России</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #0b1320; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-    
-    .phone-frame {
-      width: 400px;
-      height: 850px;
-      background-color: #f1f5f9;
-      border-radius: 40px;
-      border: 8px solid #1e293b;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      background-color: var(--bg);
       display: flex;
       flex-direction: column;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+      color: var(--text);
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    /* ===== ТЕМЫ ===== */
+    :root, [data-theme="light"] {
+      --bg: #f1f5f9;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --text-sub: #475569;
+      --section-title: #334155;
+      --header-bg-1: #0d2238;
+      --header-bg-2: #1b3a57;
+      --header-border: #b91c1c;
+      --bottom-bg: #ffffff;
+      --bottom-border: #cbd5e1;
+      --tab-inactive: #64748b;
+      --tab-active: #1b3a57;
+      --btn-bg: #1b3a57;
+      --btn-bg-secondary: #64748b;
+      --btn-bg-blue: #2563eb;
+      --status-bg: #eff6ff;
+      --status-border: #2563eb;
+      --table-head-bg: #f8fafc;
+      --table-border: #cbd5e1;
+      --input-border: #cbd5e1;
+      --banner-1: #1b3a57;
+      --banner-2: #244b70;
+      --modal-bg: #ffffff;
+      --overlay-bg: rgba(0,0,0,0.5);
+      --dashed-border: #94a3b8;
+      --card-soft-bg: #f8fafc;
+      --accent-blue: #1b3a57;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b1320;
+      --card-bg: #16202f;
+      --card-border: #24344a;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-sub: #cbd5e1;
+      --section-title: #cbd5e1;
+      --header-bg-1: #0a1a2c;
+      --header-bg-2: #14293f;
+      --header-border: #b91c1c;
+      --bottom-bg: #16202f;
+      --bottom-border: #24344a;
+      --tab-inactive: #94a3b8;
+      --tab-active: #60a5fa;
+      --btn-bg: #2563eb;
+      --btn-bg-secondary: #475569;
+      --btn-bg-blue: #3b82f6;
+      --status-bg: #1e3a5f;
+      --status-border: #3b82f6;
+      --table-head-bg: #1e293b;
+      --table-border: #334155;
+      --input-border: #334155;
+      --banner-1: #14293f;
+      --banner-2: #1e3a5f;
+      --modal-bg: #16202f;
+      --overlay-bg: rgba(0,0,0,0.7);
+      --dashed-border: #475569;
+      --card-soft-bg: #1e293b;
+      --accent-blue: #60a5fa;
+    }
+
+    .app {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
       overflow: hidden;
-      position: relative;
     }
 
     .header {
-      background: linear-gradient(135deg, #0d2238 0%, #1b3a57 100%);
+      background: linear-gradient(135deg, var(--header-bg-1) 0%, var(--header-bg-2) 100%);
       color: white;
       padding: 16px 16px 14px 16px;
       position: relative;
       overflow: hidden;
-      border-bottom: 3px solid #b91c1c;
+      border-bottom: 3px solid var(--header-border);
+      flex-shrink: 0;
     }
 
     .rf-stripe {
@@ -58,28 +132,50 @@
       flex-shrink: 0;
     }
 
-    .content { flex: 1; overflow-y: auto; padding: 14px; display: none; }
+    .settings-btn {
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.2s, transform 0.3s;
+    }
+    .settings-btn:hover { background: rgba(255,255,255,0.25); }
+    .settings-btn:active { transform: rotate(45deg); }
+    .settings-btn svg { width: 22px; height: 22px; fill: currentColor; }
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+      display: none;
+      -webkit-overflow-scrolling: touch;
+    }
     .content.active { display: block; }
 
     .card {
-      background: white;
+      background: var(--card-bg);
       border-radius: 14px;
       padding: 14px;
       margin-bottom: 12px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--card-border);
+      color: var(--text);
     }
 
     .card-banner {
-      background: linear-gradient(90deg, #1b3a57, #244b70);
+      background: linear-gradient(90deg, var(--banner-1), var(--banner-2));
       color: white;
       border-radius: 14px;
       padding: 14px;
       margin-bottom: 12px;
     }
-
-    .status-card { background: #eff6ff; border-left: 5px solid #2563eb; }
-    .status-card.fail { background: #fef2f2; border-left: 5px solid #dc2626; }
 
     .score-circle {
       width: 40px;
@@ -99,7 +195,7 @@
     .badge-2 { background: #b91c1c; }
 
     .btn {
-      background: #1b3a57;
+      background: var(--btn-bg);
       color: white;
       border: none;
       border-radius: 8px;
@@ -111,11 +207,12 @@
 
     .bottom-bar {
       height: 65px;
-      background: white;
-      border-top: 1px solid #cbd5e1;
+      background: var(--bottom-bg);
+      border-top: 1px solid var(--bottom-border);
       display: flex;
       justify-content: space-around;
       align-items: center;
+      flex-shrink: 0;
     }
     .tab-btn {
       display: flex;
@@ -123,23 +220,23 @@
       align-items: center;
       background: none;
       border: none;
-      color: #64748b;
+      color: var(--tab-inactive);
       font-size: 11px;
       cursor: pointer;
       gap: 3px;
     }
-    .tab-btn.active { color: #1b3a57; font-weight: bold; }
+    .tab-btn.active { color: var(--tab-active); font-weight: bold; }
     .tab-btn svg { width: 22px; height: 22px; fill: currentColor; }
 
     table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 11px; }
-    th, td { border: 1px solid #cbd5e1; padding: 6px; text-align: center; }
-    th { background: #f8fafc; font-weight: 600; color: #334155; }
-    select, input { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; }
+    th, td { border: 1px solid var(--table-border); padding: 6px; text-align: center; color: var(--text); }
+    th { background: var(--table-head-bg); font-weight: 600; color: var(--section-title); }
+    select, input { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--input-border); font-size: 13px; background: var(--card-bg); color: var(--text); }
 
     .section-title {
       font-size: 13px;
       font-weight: 700;
-      color: #334155;
+      color: var(--section-title);
       text-transform: uppercase;
       letter-spacing: 0.5px;
       margin: 12px 0 6px 4px;
@@ -148,12 +245,11 @@
       align-items: center;
     }
 
-    /* Интерактивная карточка этапа */
     .stage-card-clickable {
-      border-left: 5px solid #1b3a57;
+      border-left: 5px solid var(--accent-blue);
       margin-bottom: 10px;
       padding: 14px;
-      background: white;
+      background: var(--card-bg);
       border-radius: 10px;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -161,28 +257,206 @@
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 2px 4px rgba(0,0,0,0.04);
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--card-border);
       border-left-width: 5px;
+      color: var(--text);
     }
     .stage-card-clickable:hover {
-      background: #f8fafc;
+      background: var(--card-soft-bg);
       transform: translateX(2px);
     }
 
     .detail-day-item {
-      background: white;
+      background: var(--card-bg);
       border-radius: 8px;
       padding: 10px;
       margin-bottom: 8px;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--card-border);
       font-size: 12px;
       line-height: 1.4;
+      color: var(--text);
     }
+
+    /* ===== НАСТРОЙКИ ===== */
+    .settings-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      border: 1px solid var(--card-border);
+    }
+    .settings-row-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .settings-row-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Тумблер-сегмент темы */
+    .theme-segment {
+      display: flex;
+      background: var(--card-soft-bg);
+      border-radius: 10px;
+      padding: 4px;
+      gap: 4px;
+      border: 1px solid var(--card-border);
+    }
+    .theme-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-width: 64px;
+    }
+    .theme-option svg { width: 20px; height: 20px; fill: currentColor; }
+    .theme-option.active {
+      background: var(--btn-bg);
+      color: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    /* Модальное окно "О приложении" */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--overlay-bg);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: var(--modal-bg);
+      border-radius: 20px;
+      padding: 24px;
+      max-width: 380px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      color: var(--text);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      animation: modalIn 0.25s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .about-logo {
+      width: 88px;
+      height: 100px;
+      margin: 0 auto 16px;
+      background: #b91c1c;
+      clip-path: polygon(50% 0%, 100% 20%, 100% 75%, 50% 100%, 0% 75%, 0% 20%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #fbbf24;
+      position: relative;
+    }
+    .about-logo-star {
+      color: #fbbf24;
+      font-size: 44px;
+      font-weight: 900;
+      line-height: 1;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .about-title {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .about-subtitle {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    .about-divider {
+      height: 1px;
+      background: var(--card-border);
+      margin: 16px 0;
+    }
+    .about-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 8px 0;
+      font-size: 13px;
+      gap: 12px;
+    }
+    .about-row-label {
+      color: var(--text-muted);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .about-row-value {
+      color: var(--text);
+      text-align: right;
+      font-weight: 500;
+    }
+    .about-devs {
+      list-style: none;
+      text-align: right;
+    }
+    .about-devs li {
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 500;
+      padding: 2px 0;
+    }
+    .about-org {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-sub);
+      line-height: 1.5;
+      padding: 12px;
+      background: var(--card-soft-bg);
+      border-radius: 10px;
+      border-left: 3px solid var(--accent-blue);
+    }
+    .about-close {
+      width: 100%;
+      background: var(--btn-bg);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .about-close:active { opacity: 0.8; }
   </style>
 </head>
-<body>
+<body data-theme="light">
 
-<div class="phone-frame">
+<div class="app">
   <!-- ШАПКА -->
   <div class="header">
     <div class="rf-stripe"></div>
@@ -194,14 +468,16 @@
         <div style="font-size:14px; font-weight:800; letter-spacing:0.5px;">ФИЗПОДГОТОВКА МВД</div>
         <div id="headerProfile" style="font-size:11px; opacity:0.85;">Загрузка...</div>
       </div>
+      <button class="settings-btn" onclick="switchTab('settings', document.querySelectorAll('.tab-btn')[4])" title="Настройки">
+        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+      </button>
     </div>
   </div>
 
   <!-- 1. ДАШБОРД ТЕКУЩЕЙ ФОРМЫ -->
   <div id="page-dashboard" class="content active">
-    <!-- БЛОК ЦЕЛЕВОЙ ДАТЫ -->
-    <div class="card" style="border-top: 3px solid #1b3a57;">
-      <div style="font-weight: 700; font-size: 13px; color: #1b3a57; margin-bottom: 8px;">
+    <div class="card" style="border-top: 3px solid var(--accent-blue);">
+      <div style="font-weight: 700; font-size: 13px; color: var(--accent-blue); margin-bottom: 8px;">
         Целевая дата аттестации / сдачи
       </div>
       <div style="display: flex; gap: 8px; margin-bottom: 8px;">
@@ -212,54 +488,51 @@
           <option value="3">Цель: 3</option>
         </select>
       </div>
-      <div id="targetSummary" style="font-size: 11px; color: #475569; line-height: 1.4;">
+      <div id="targetSummary" style="font-size: 11px; color: var(--text-sub); line-height: 1.4;">
         Расчет срока...
       </div>
     </div>
 
     <div class="section-title">Текущие нормативы</div>
 
-    <!-- Сила -->
     <div class="card">
       <div style="display: flex; align-items: center; gap: 12px;">
         <div id="strengthBadge" class="score-circle badge-3">3</div>
         <div style="flex: 1;">
           <div id="strengthName" style="font-weight: 700; font-size: 13px;">Подтягивания</div>
           <div id="strengthVal" style="font-size: 12px; font-weight: 600;">8 раз</div>
-          <div id="strengthDeficit" style="font-size: 11px; color: #64748b;">Расчет...</div>
+          <div id="strengthDeficit" style="font-size: 11px; color: var(--text-muted);">Расчет...</div>
         </div>
         <button class="btn" onclick="editStrength()">Ввод</button>
       </div>
     </div>
 
-    <!-- Быстрота -->
     <div class="card">
       <div style="display: flex; align-items: center; gap: 12px;">
         <div id="shuttleBadge" class="score-circle badge-4">4</div>
         <div style="flex: 1;">
           <div style="font-weight: 700; font-size: 13px;">Челночный бег 10х10 м</div>
           <div id="shuttleVal" style="font-size: 12px; font-weight: 600;">26.0 сек</div>
-          <div id="shuttleDeficit" style="font-size: 11px; color: #64748b;">Расчет...</div>
+          <div id="shuttleDeficit" style="font-size: 11px; color: var(--text-muted);">Расчет...</div>
         </div>
         <button class="btn" onclick="editShuttle()">Ввод</button>
       </div>
     </div>
 
-    <!-- Выносливость -->
     <div class="card">
       <div style="display: flex; align-items: center; gap: 12px;">
         <div id="crossBadge" class="score-circle badge-3">3</div>
         <div style="flex: 1;">
           <div style="font-weight: 700; font-size: 13px;">Кросс 1000 м</div>
           <div id="crossVal" style="font-size: 12px; font-weight: 600;">4:05</div>
-          <div id="crossDeficit" style="font-size: 11px; color: #64748b;">Расчет...</div>
+          <div id="crossDeficit" style="font-size: 11px; color: var(--text-muted);">Расчет...</div>
         </div>
         <button class="btn" onclick="editCross()">Ввод</button>
       </div>
     </div>
   </div>
 
-  <!-- 2. ПРОГРАММА НА ВЕСЬ ПЕРИОД (СПИСОК ЭТАПОВ) -->
+  <!-- 2. ПРОГРАММА -->
   <div id="page-goals" class="content">
     <div class="card-banner">
       <div id="programHeaderTitle" style="font-weight: 700; font-size: 14px;">Комплексный план подготовки</div>
@@ -269,62 +542,60 @@
       </div>
     </div>
 
-    <!-- Кнопка фиксации среза -->
-    <div class="card" style="background:#f8fafc; border: 1px dashed #94a3b8; text-align:center;">
-      <div style="font-weight:700; font-size:12px; color:#1e293b; margin-bottom:4px;">Промежуточный срез физической формы</div>
-      <div style="font-size:11px; color:#64748b; margin-bottom:8px;">Внесите свежие замеры для автоматической корректировки</div>
-      <button class="btn" style="background:#2563eb;" onclick="recordIntermediateCheck()">Зафиксировать срез</button>
+    <div class="card" style="background: var(--card-soft-bg); border: 1px dashed var(--dashed-border); text-align:center;">
+      <div style="font-weight:700; font-size:12px; color:var(--text); margin-bottom:4px;">Промежуточный срез физической формы</div>
+      <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">Внесите свежие замеры для автоматической корректировки</div>
+      <button class="btn" style="background:var(--btn-bg-blue);" onclick="recordIntermediateCheck()">Зафиксировать срез</button>
     </div>
 
     <div class="section-title">
       <span>Этапы подготовки (нажмите для деталей)</span>
     </div>
 
-    <!-- ИНТЕРАКТИВНЫЕ ЭТАПЫ -->
     <div class="stage-card-clickable" onclick="openStageDetail(1)">
       <div>
-        <div style="font-weight:700; font-size:13px; color:#1b3a57;">ЭТАП 1: Базово-втягивающий</div>
-        <div id="stage1Dates" style="font-size:11px; color:#64748b; margin-top:2px;">1-я треть срока • Аэробная база и связки</div>
+        <div style="font-weight:700; font-size:13px; color:var(--accent-blue);">ЭТАП 1: Базово-втягивающий</div>
+        <div id="stage1Dates" style="font-size:11px; color:var(--text-muted); margin-top:2px;">1-я треть срока • Аэробная база и связки</div>
       </div>
-      <div style="color:#1b3a57; font-weight:bold; font-size:18px;">›</div>
+      <div style="color:var(--accent-blue); font-weight:bold; font-size:18px;">›</div>
     </div>
 
     <div class="stage-card-clickable" onclick="openStageDetail(2)">
       <div>
-        <div style="font-weight:700; font-size:13px; color:#1b3a57;">ЭТАП 2: Развивающий / Ударный</div>
-        <div id="stage2Dates" style="font-size:11px; color:#64748b; margin-top:2px;">2-я треть срока • Ликвидация дефицита</div>
+        <div style="font-weight:700; font-size:13px; color:var(--accent-blue);">ЭТАП 2: Развивающий / Ударный</div>
+        <div id="stage2Dates" style="font-size:11px; color:var(--text-muted); margin-top:2px;">2-я треть срока • Ликвидация дефицита</div>
       </div>
-      <div style="color:#1b3a57; font-weight:bold; font-size:18px;">›</div>
+      <div style="color:var(--accent-blue); font-weight:bold; font-size:18px;">›</div>
     </div>
 
     <div class="stage-card-clickable" onclick="openStageDetail(3)">
       <div>
-        <div style="font-weight:700; font-size:13px; color:#1b3a57;">ЭТАП 3: Пиковый / Контрольный</div>
-        <div id="stage3Dates" style="font-size:11px; color:#64748b; margin-top:2px;">Заключительная треть • Выход на пик</div>
+        <div style="font-weight:700; font-size:13px; color:var(--accent-blue);">ЭТАП 3: Пиковый / Контрольный</div>
+        <div id="stage3Dates" style="font-size:11px; color:var(--text-muted); margin-top:2px;">Заключительная треть • Выход на пик</div>
       </div>
-      <div style="color:#1b3a57; font-weight:bold; font-size:18px;">›</div>
+      <div style="color:var(--accent-blue); font-weight:bold; font-size:18px;">›</div>
     </div>
   </div>
 
-  <!-- ВНУТРЕННИЙ ЭКРАН: ДЕТАЛИЗАЦИЯ ВЫБРАННОГО ЭТАПА -->
+  <!-- ДЕТАЛИ ЭТАПА -->
   <div id="page-stage-detail" class="content">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-      <button class="btn" style="background:#64748b;" onclick="closeStageDetail()">← Назад к этапам</button>
-      <span id="stageDetailBadge" style="font-size:11px; font-weight:bold; background:#e2e8f0; padding:4px 8px; border-radius:6px;">Этап</span>
+      <button class="btn" style="background:var(--btn-bg-secondary);" onclick="closeStageDetail()">← Назад к этапам</button>
+      <span id="stageDetailBadge" style="font-size:11px; font-weight:bold; background:var(--card-soft-bg); padding:4px 8px; border-radius:6px; color:var(--text);">Этап</span>
     </div>
 
-    <div class="card" style="border-top: 3px solid #1b3a57;">
-      <div id="stageDetailTitle" style="font-weight:700; font-size:14px; color:#1b3a57;">Название этапа</div>
-      <div id="stageDetailSubtitle" style="font-size:11px; color:#64748b; margin-top:4px;">Срок и задачи</div>
+    <div class="card" style="border-top: 3px solid var(--accent-blue);">
+      <div id="stageDetailTitle" style="font-weight:700; font-size:14px; color:var(--accent-blue);">Название этапа</div>
+      <div id="stageDetailSubtitle" style="font-size:11px; color:var(--text-muted); margin-top:4px;">Срок и задачи</div>
     </div>
 
     <div class="section-title">Расписание тренировок микроцикла</div>
     <div id="stageDaysContainer"></div>
   </div>
 
-  <!-- 3. СПРАВОЧНИК П. 382 -->
+  <!-- 3. СПРАВОЧНИК -->
   <div id="page-handbook" class="content">
-    <div class="card" style="background: #f8fafc; font-size: 11px; color: #475569; border-left:4px solid #1b3a57;">
+    <div class="card" style="background: var(--card-soft-bg); font-size: 11px; color: var(--text-sub); border-left:4px solid var(--accent-blue);">
       Нормативы для курсантов в соответствии с <b>п. 382 Приказа МВД России от 02.02.2024 № 44</b>.
     </div>
 
@@ -358,13 +629,13 @@
     <div id="handbookFullList"></div>
   </div>
 
-  <!-- 4. ПРОФИЛЬ КУРСАНТА -->
+  <!-- 4. ПРОФИЛЬ -->
   <div id="page-profile" class="content">
     <div class="card">
-      <div style="font-weight: 700; font-size: 14px; margin-bottom: 12px; color:#1b3a57;">Учетные параметры (п. 382)</div>
-      
+      <div style="font-weight: 700; font-size: 14px; margin-bottom: 12px; color:var(--accent-blue);">Учетные параметры (п. 382)</div>
+
       <div style="margin-bottom: 12px;">
-        <label style="font-size: 12px; color: #64748b; display: block; margin-bottom: 4px;">Пол курсанта</label>
+        <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Пол курсанта</label>
         <select id="genderSelect" onchange="updateProfile()">
           <option value="male" selected>Мужской</option>
           <option value="female">Женский</option>
@@ -372,7 +643,7 @@
       </div>
 
       <div style="margin-bottom: 12px;">
-        <label style="font-size: 12px; color: #64748b; display: block; margin-bottom: 4px;">Семестр обучения</label>
+        <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Семестр обучения</label>
         <select id="semesterSelect" onchange="updateProfile()">
           <option value="1" selected>1 семестр (1 курс)</option>
           <option value="2">2 семестр (1 курс)</option>
@@ -388,12 +659,48 @@
       </div>
 
       <div style="margin-bottom: 12px;" id="groupContainer">
-        <label style="font-size: 12px; color: #64748b; display: block; margin-bottom: 4px;">Группа предназначения</label>
+        <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Группа предназначения</label>
         <select id="groupSelect" onchange="updateProfile()">
           <option value="1-2" selected>1–2 группа (оперативные подразделения, полиция)</option>
           <option value="3-4">3–4 группа (следствие, дознание, штаб, тыл)</option>
         </select>
       </div>
+    </div>
+  </div>
+
+  <!-- 5. НАСТРОЙКИ -->
+  <div id="page-settings" class="content">
+    <div class="section-title" style="margin-top:4px;">Оформление</div>
+
+    <div class="settings-row" style="flex-direction: column; align-items: stretch; gap: 12px;">
+      <div>
+        <div class="settings-row-title">Тема оформления</div>
+        <div class="settings-row-sub">Выберите светлую, тёмную или системную тему</div>
+      </div>
+      <div class="theme-segment" id="themeSegment">
+        <button class="theme-option" data-theme-value="light" onclick="setTheme('light')">
+          <svg viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06z"/></svg>
+          Светлая
+        </button>
+        <button class="theme-option" data-theme-value="dark" onclick="setTheme('dark')">
+          <svg viewBox="0 0 24 24"><path d="M9 2c-1.05 0-2.05.16-3 .46 4.06 1.27 7 5.06 7 9.54 0 4.48-2.94 8.27-7 9.54.95.3 1.95.46 3 .46 5.52 0 10-4.48 10-10S14.52 2 9 2z"/></svg>
+          Тёмная
+        </button>
+        <button class="theme-option" data-theme-value="system" onclick="setTheme('system')">
+          <svg viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z"/></svg>
+          Системная
+        </button>
+      </div>
+    </div>
+
+    <div class="section-title">Информация</div>
+
+    <div class="settings-row" onclick="openAbout()" style="cursor:pointer;">
+      <div>
+        <div class="settings-row-title">О приложении</div>
+        <div class="settings-row-sub">Версия, разработчики, организация</div>
+      </div>
+      <div style="color:var(--text-muted); font-weight:bold; font-size:20px;">›</div>
     </div>
   </div>
 
@@ -415,14 +722,61 @@
       <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
       Профиль
     </button>
+    <button class="tab-btn" onclick="switchTab('settings', this)">
+      <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+      Настройки
+    </button>
+  </div>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО "О ПРИЛОЖЕНИИ" -->
+<div class="modal-overlay" id="aboutModal" onclick="if(event.target === this) closeAbout()">
+  <div class="modal">
+    <div class="about-logo">
+      <span class="about-logo-star">★</span>
+    </div>
+    <div class="about-title">Физподготовка МВД</div>
+    <div class="about-subtitle">Приложение для подготовки к аттестации по физподготовке</div>
+
+    <div class="about-divider"></div>
+
+    <div class="about-row">
+      <span class="about-row-label">Версия</span>
+      <span class="about-row-value">1.0</span>
+    </div>
+
+    <div class="about-row">
+      <span class="about-row-label">Нормативная база</span>
+      <span class="about-row-value">п. 382 Приказа МВД России № 44 от 02.02.2024</span>
+    </div>
+
+    <div class="about-divider"></div>
+
+    <div class="about-row">
+      <span class="about-row-label">Разработчики</span>
+      <ul class="about-devs">
+        <li>Нестерёнок Ю.В.</li>
+        <li>Сидлецкий А.В.</li>
+        <li>Иликбаева Е.С.</li>
+      </ul>
+    </div>
+
+    <div class="about-divider"></div>
+
+    <div class="about-org">
+      <b>Крымский филиал</b><br>
+      Краснодарского университета МВД России
+    </div>
+
+    <button class="about-close" onclick="closeAbout()">Закрыть</button>
   </div>
 </div>
 
 <script>
+  // ===== ПРОФИЛЬ И ДАННЫЕ =====
   let profile = { gender: 'male', semester: 1, group: '1-2' };
-  let userResults = { maleStrength: 8, femaleStrength: 25, shuttle: 26.0, crossSeconds: 245 }; // 4:05
+  let userResults = { maleStrength: 8, femaleStrength: 25, shuttle: 26.0, crossSeconds: 245 };
 
-  // Расчет целевой даты (+60 дней по умолчанию)
   let today = new Date();
   let defaultTarget = new Date();
   defaultTarget.setDate(today.getDate() + 60);
@@ -431,7 +785,36 @@
     score: 5
   };
 
-  // БАЗА ДАННЫХ П. 382
+  // ===== ТЕМА =====
+  let currentTheme = 'system'; // 'light' | 'dark' | 'system'
+
+  function applyTheme(theme) {
+    let effective = theme;
+    if (theme === 'system') {
+      effective = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.body.setAttribute('data-theme', effective);
+    document.querySelector('meta[name="theme-color"]').setAttribute(
+      'content',
+      effective === 'dark' ? '#0a1a2c' : '#0d2238'
+    );
+    // Подсветка активной кнопки в сегменте
+    document.querySelectorAll('.theme-option').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.themeValue === theme);
+    });
+  }
+
+  function setTheme(theme) {
+    currentTheme = theme;
+    applyTheme(theme);
+  }
+
+  // Реакция на смену системной темы
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (currentTheme === 'system') applyTheme('system');
+  });
+
+  // ===== БАЗА ДАННЫХ П. 382 =====
   const p382DB = {
     m_sem1_g12: [
       { t: 'Подтягивание на перекладине', u: 'раз', low: false, d5: '9 и более', d4: '7–8', d3: '4–6', t5: 9, t4: 7, t3: 4 },
@@ -474,7 +857,6 @@
     ]
   };
 
-  // Заполнение промежуточных семестров
   p382DB.m_sem2_g12 = p382DB.m_sem1_g12; p382DB.m_sem2_g34 = p382DB.m_sem1_g34;
   p382DB.m_sem3_g12 = p382DB.m_sem1_g12; p382DB.m_sem3_g34 = p382DB.m_sem1_g34;
   p382DB.m_sem4_g12 = p382DB.m_sem5_plus; p382DB.m_sem4_g34 = p382DB.m_sem1_g12;
@@ -554,14 +936,11 @@
     }
 
     const list = p382DB[groupKey];
-
-    // Шапка
     const courseNum = Math.ceil(sem / 2);
     document.getElementById('headerProfile').innerText = isUnified
       ? `${isMale ? 'Муж.' : 'Жен.'} | ${sem} семестр (${courseNum} курс) — Единые нормы`
       : `${isMale ? 'Муж.' : 'Жен.'} | ${sem} семестр (${courseNum} курс) | ${profile.group} гр.`;
 
-    // 1. Сила
     const curStr = isMale ? userResults.maleStrength : userResults.femaleStrength;
     const sRes = assess(list[0], curStr);
     document.getElementById('strengthName').innerText = list[0].t;
@@ -570,7 +949,6 @@
     document.getElementById('strengthBadge').className = `score-circle ${sRes.color}`;
     document.getElementById('strengthDeficit').innerText = sRes.msg;
 
-    // 2. Челночный бег
     const shuIndex = isMale ? 3 : 2;
     const shuRes = assess(list[shuIndex], userResults.shuttle);
     document.getElementById('shuttleVal').innerText = `${userResults.shuttle} сек`;
@@ -578,7 +956,6 @@
     document.getElementById('shuttleBadge').className = `score-circle ${shuRes.color}`;
     document.getElementById('shuttleDeficit').innerText = shuRes.msg;
 
-    // 3. Кросс 1000 м
     const croIndex = isMale ? 4 : 3;
     const croRes = assess(list[croIndex], userResults.crossSeconds);
     document.getElementById('crossVal').innerText = formatTime(userResults.crossSeconds);
@@ -586,7 +963,6 @@
     document.getElementById('crossBadge').className = `score-circle ${croRes.color}`;
     document.getElementById('crossDeficit').innerText = croRes.msg;
 
-    // Расчет дат
     const tDate = new Date(targetConfig.date);
     const curDate = new Date();
     const diffTime = tDate - curDate;
@@ -608,7 +984,6 @@
     renderHandbook();
   }
 
-  // --- ДЕТАЛИЗАЦИЯ ЭТАПОВ ПО ДНЯМ ---
   function openStageDetail(stageNum) {
     document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
     document.getElementById('page-stage-detail').classList.add('active');
@@ -628,70 +1003,31 @@
       t.innerText = 'ЭТАП 1: Базово-втягивающий';
       s.innerText = `Продолжительность: ~${stageLen} дн. Фокус: укрепление связок, аэробный объем без закисления.`;
       container.innerHTML = `
-        <div class="detail-day-item">
-          <b>Понедельник — Аэробный кросс:</b><br>
-          Равномерный бег 2000 м в медленном темпе (пульс 135–140 уд/мин). Следить за ровным дыханием (шаг-шаг-вдох). Задача — тренировка сердечной мышцы без перегрузки.
-        </div>
-        <div class="detail-day-item">
-          <b>Вторник — Силовой объем (без отказа):</b><br>
-          ${isMale ? 'Подтягивания: 5 подходов по 4–5 раз (запас 2-3 повтора в подходе). Пауза 2 мин. В конце — вис на перекладине 60 сек.' : 'СКУ: 3 серии по 45 секунд в среднем темпе с паузой 2 мин.'}
-        </div>
-        <div class="detail-day-item">
-          <b>Среда — Суставное восстановление:</b><br>
-          25 минут разминки и растяжки в расположении. Проработка ахилловых сухожилий, икроножных мышц и поясницы.
-        </div>
-        <div class="detail-day-item">
-          <b>Четверг — Ловкость (база челночного бега):</b><br>
-          Отработка техники торможения и разворота на 180° без работы на максимальной скорости. 4-5 повторов вполсилы.
-        </div>
-        <div class="detail-day-item">
-          <b>Пятница — Разгрузочный силовой комплекс:</b><br>
-          Отжимания от пола 4 подхода по 15–20 раз + планка 3 серии по 45 секунд.
-        </div>
+        <div class="detail-day-item"><b>Понедельник — Аэробный кросс:</b><br>Равномерный бег 2000 м в медленном темпе (пульс 135–140 уд/мин). Следить за ровным дыханием (шаг-шаг-вдох). Задача — тренировка сердечной мышцы без перегрузки.</div>
+        <div class="detail-day-item"><b>Вторник — Силовой объем (без отказа):</b><br>${isMale ? 'Подтягивания: 5 подходов по 4–5 раз (запас 2-3 повтора в подходе). Пауза 2 мин. В конце — вис на перекладине 60 сек.' : 'СКУ: 3 серии по 45 секунд в среднем темпе с паузой 2 мин.'}</div>
+        <div class="detail-day-item"><b>Среда — Суставное восстановление:</b><br>25 минут разминки и растяжки в расположении. Проработка ахилловых сухожилий, икроножных мышц и поясницы.</div>
+        <div class="detail-day-item"><b>Четверг — Ловкость (база челночного бега):</b><br>Отработка техники торможения и разворота на 180° без работы на максимальной скорости. 4-5 повторов вполсилы.</div>
+        <div class="detail-day-item"><b>Пятница — Разгрузочный силовой комплекс:</b><br>Отжимания от пола 4 подхода по 15–20 раз + планка 3 серии по 45 секунд.</div>
       `;
     } else if (stageNum === 2) {
       b.innerText = 'Этап 2';
       t.innerText = 'ЭТАП 2: Развивающий / Ударный';
       s.innerText = `Продолжительность: ~${stageLen} дн. Фокус: ликвидация дефицита, максимальная мощность.`;
       container.innerHTML = `
-        <div class="detail-day-item">
-          <b>Понедельник — Скоростные интервалы:</b><br>
-          4 серии по 200 метров в соревновательном темпе (38–40 сек отрезок). Отдых шагом 2 мин. Приучение мышц работать при закислении.
-        </div>
-        <div class="detail-day-item">
-          <b>Вторник — Ударный силовой день:</b><br>
-          ${isMale ? 'Подтягивания лесенкой: 1-2-3-4-5-4-3-2-1. Затем толчок/жим гири 24 кг — 3 подхода на максимум.' : 'СКУ: 4 серии по 1 минуте с фиксацией количества повторений + отжимания от пола до отказа.'}
-        </div>
-        <div class="detail-day-item">
-          <b>Среда — Активный отдых:</b><br>
-          Ходьба 30 мин + дыхательная гимнастика. Отдых для ЦНС.
-        </div>
-        <div class="detail-day-item">
-          <b>Четверг — Скоростной челночный бег:</b><br>
-          6 контрольных забегов 10х10 м с интервалом отдыха 2.5 мин. Контроль стопорящего шага и касания линии.
-        </div>
-        <div class="detail-day-item">
-          <b>Пятница — Темповый кросс:</b><br>
-          1500 метров в темпе целевого зачета на оценку «4» или «5». Фиксация времени каждые 500 м.
-        </div>
+        <div class="detail-day-item"><b>Понедельник — Скоростные интервалы:</b><br>4 серии по 200 метров в соревновательном темпе (38–40 сек отрезок). Отдых шагом 2 мин. Приучение мышц работать при закислении.</div>
+        <div class="detail-day-item"><b>Вторник — Ударный силовой день:</b><br>${isMale ? 'Подтягивания лесенкой: 1-2-3-4-5-4-3-2-1. Затем толчок/жим гири 24 кг — 3 подхода на максимум.' : 'СКУ: 4 серии по 1 минуте с фиксацией количества повторений + отжимания от пола до отказа.'}</div>
+        <div class="detail-day-item"><b>Среда — Активный отдых:</b><br>Ходьба 30 мин + дыхательная гимнастика. Отдых для ЦНС.</div>
+        <div class="detail-day-item"><b>Четверг — Скоростной челночный бег:</b><br>6 контрольных забегов 10х10 м с интервалом отдыха 2.5 мин. Контроль стопорящего шага и касания линии.</div>
+        <div class="detail-day-item"><b>Пятница — Темповый кросс:</b><br>1500 метров в темпе целевого зачета на оценку «4» или «5». Фиксация времени каждые 500 м.</div>
       `;
     } else {
       b.innerText = 'Этап 3';
       t.innerText = 'ЭТАП 3: Пиковый / Контрольный';
       s.innerText = `Продолжительность: ~${stageLen} дн. Фокус: подводка к зачету, прикидки и разгрузка (тейперинг).`;
       container.innerHTML = `
-        <div class="detail-day-item">
-          <b>Неделя 1 (Моделирование зачета):</b><br>
-          Понедельник — контрольная сдача бега 1000 м на время. Среда — контрольный челночный бег. Пятница — сдача силового норматива на максимум.
-        </div>
-        <div class="detail-day-item">
-          <b>За 7 дней до контрольной даты:</b><br>
-          Снижение объема нагрузок на 40%. Тренировки короткие, тонизирующие: 2 подхода подтягиваний, 2 ускорения по 100 м. Без закисления.
-        </div>
-        <div class="detail-day-item">
-          <b>За 48 часов до сдачи:</b><br>
-          Полный покой от физических нагрузок. Легкая 15-минутная суставная разминка, сон от 8 часов, достаточный водный баланс.
-        </div>
+        <div class="detail-day-item"><b>Неделя 1 (Моделирование зачета):</b><br>Понедельник — контрольная сдача бега 1000 м на время. Среда — контрольный челночный бег. Пятница — сдача силового норматива на максимум.</div>
+        <div class="detail-day-item"><b>За 7 дней до контрольной даты:</b><br>Снижение объема нагрузок на 40%. Тренировки короткие, тонизирующие: 2 подхода подтягиваний, 2 ускорения по 100 м. Без закисления.</div>
+        <div class="detail-day-item"><b>За 48 часов до сдачи:</b><br>Полный покой от физических нагрузок. Легкая 15-минутная суставная разминка, сон от 8 часов, достаточный водный баланс.</div>
       `;
     }
   }
@@ -706,10 +1042,8 @@
     const sPrompt = isMale ? 'Промежуточный замер: Подтягивания (раз):' : 'Промежуточный замер: СКУ (раз):';
     let sVal = prompt(sPrompt, isMale ? userResults.maleStrength : userResults.femaleStrength);
     if (!sVal) return;
-
     let shuVal = prompt('Промежуточный замер: Челночный бег (сек):', userResults.shuttle);
     if (!shuVal) return;
-
     let croVal = prompt('Промежуточный замер: Кросс 1000 м (например 3:55 или 4,05):', formatTime(userResults.crossSeconds));
     if (!croVal) return;
 
@@ -747,10 +1081,7 @@
     let v = prompt('Время челночного бега 10х10 м (сек):', userResults.shuttle);
     if (v !== null && v !== '') {
       let val = parseFloat(v.replace(',', '.'));
-      if (!isNaN(val)) {
-        userResults.shuttle = val;
-        render();
-      }
+      if (!isNaN(val)) { userResults.shuttle = val; render(); }
     }
   }
 
@@ -759,12 +1090,8 @@
     let v = prompt('Время кросса 1000 м (например: 3:55 или 4,05):', cur);
     if (v !== null && v !== '') {
       let p = parseTimeToSeconds(v);
-      if (p !== null && !isNaN(p)) {
-        userResults.crossSeconds = p;
-        render();
-      } else {
-        alert('Неверный формат времени.');
-      }
+      if (p !== null && !isNaN(p)) { userResults.crossSeconds = p; render(); }
+      else alert('Неверный формат времени.');
     }
   }
 
@@ -775,7 +1102,7 @@
     items.forEach(it => {
       html += `
         <div class="card">
-          <div style="font-weight:700;font-size:13px;color:#1b3a57;">${it.t} (${it.u})</div>
+          <div style="font-weight:700;font-size:13px;color:var(--accent-blue);">${it.t} (${it.u})</div>
           <table>
             <tr><th>Оценка 5</th><th>Оценка 4</th><th>Оценка 3</th></tr>
             <tr><td><b>${it.d5}</b></td><td><b>${it.d4}</b></td><td><b>${it.d3}</b></td></tr>
@@ -789,7 +1116,7 @@
     document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('page-' + id).classList.add('active');
-    btn.classList.add('active');
+    if (btn) btn.classList.add('active');
   }
 
   function updateProfile() {
@@ -799,6 +1126,20 @@
     render();
   }
 
+  // ===== МОДАЛКА "О ПРИЛОЖЕНИИ" =====
+  function openAbout() {
+    document.getElementById('aboutModal').classList.add('active');
+  }
+  function closeAbout() {
+    document.getElementById('aboutModal').classList.remove('active');
+  }
+  // Закрытие по Esc
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeAbout();
+  });
+
+  // ===== ИНИЦИАЛИЗАЦИЯ =====
+  applyTheme(currentTheme);
   render();
 </script>
 </body>
