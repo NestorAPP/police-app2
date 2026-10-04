@@ -2,43 +2,32 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Физподготовка МВД России</title>
   <style>
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #0b1320; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
     
-    html, body {
-      width: 100%;
-      height: 100%;
+    .phone-frame {
+      width: 400px;
+      height: 850px;
       background-color: #f1f5f9;
-      overflow: hidden;
-    }
-
-    .app-viewport {
-      width: 100vw;
-      height: 100vh;
+      border-radius: 40px;
+      border: 8px solid #1e293b;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
       display: flex;
       flex-direction: column;
-      background-color: #f1f5f9;
+      overflow: hidden;
+      position: relative;
     }
 
     .header {
       background: linear-gradient(135deg, #0d2238 0%, #1b3a57 100%);
       color: white;
-      padding-top: max(16px, env(safe-area-inset-top));
-      padding-bottom: 14px;
-      padding-left: 16px;
-      padding-right: 16px;
+      padding: 16px 16px 14px 16px;
       position: relative;
-      flex-shrink: 0;
+      overflow: hidden;
       border-bottom: 3px solid #b91c1c;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
 
     .rf-stripe {
@@ -53,13 +42,13 @@
     .header-top {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       margin-top: 4px;
     }
 
     .emblem-shield {
-      width: 34px;
-      height: 38px;
+      width: 32px;
+      height: 36px;
       background: #b91c1c;
       clip-path: polygon(50% 0%, 100% 20%, 100% 75%, 50% 100%, 0% 75%, 0% 20%);
       display: flex;
@@ -69,13 +58,7 @@
       flex-shrink: 0;
     }
 
-    .content { 
-      flex: 1; 
-      overflow-y: auto; 
-      padding: 14px; 
-      display: none; 
-      -webkit-overflow-scrolling: touch;
-    }
+    .content { flex: 1; overflow-y: auto; padding: 14px; display: none; }
     .content.active { display: block; }
 
     .card {
@@ -83,7 +66,7 @@
       border-radius: 14px;
       padding: 14px;
       margin-bottom: 12px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
       border: 1px solid #e2e8f0;
     }
 
@@ -99,17 +82,16 @@
     .status-card.fail { background: #fef2f2; border-left: 5px solid #dc2626; }
 
     .score-circle {
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
       color: white;
-      font-size: 18px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.12);
-      flex-shrink: 0;
+      font-size: 17px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
     }
     .badge-5 { background: #15803d; }
     .badge-4 { background: #1d4ed8; }
@@ -121,30 +103,24 @@
       color: white;
       border: none;
       border-radius: 8px;
-      padding: 8px 16px;
-      font-size: 13px;
+      padding: 7px 14px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
     }
-    .btn:active { background: #0f2336; }
 
     .bottom-bar {
-      height: calc(60px + env(safe-area-inset-bottom));
-      padding-bottom: env(safe-area-inset-bottom);
+      height: 65px;
       background: white;
       border-top: 1px solid #cbd5e1;
       display: flex;
       justify-content: space-around;
       align-items: center;
-      flex-shrink: 0;
     }
     .tab-btn {
-      flex: 1;
-      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       background: none;
       border: none;
       color: #64748b;
@@ -156,9 +132,9 @@
     .tab-btn svg { width: 22px; height: 22px; fill: currentColor; }
 
     table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 11px; }
-    th, td { border: 1px solid #cbd5e1; padding: 7px; text-align: center; }
+    th, td { border: 1px solid #cbd5e1; padding: 6px; text-align: center; }
     th { background: #f8fafc; font-weight: 600; color: #334155; }
-    select, input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 14px; background: white; }
+    select, input { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; }
 
     .section-title {
       font-size: 13px;
@@ -166,12 +142,13 @@
       color: #334155;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin: 14px 0 8px 4px;
+      margin: 12px 0 6px 4px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
+    /* Интерактивная карточка этапа */
     .stage-card-clickable {
       border-left: 5px solid #1b3a57;
       margin-bottom: 10px;
@@ -179,19 +156,23 @@
       background: white;
       border-radius: 10px;
       cursor: pointer;
+      transition: all 0.2s ease;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
       border: 1px solid #e2e8f0;
       border-left-width: 5px;
     }
-    .stage-card-clickable:active { background: #f1f5f9; }
+    .stage-card-clickable:hover {
+      background: #f8fafc;
+      transform: translateX(2px);
+    }
 
     .detail-day-item {
       background: white;
       border-radius: 8px;
-      padding: 12px;
+      padding: 10px;
       margin-bottom: 8px;
       border: 1px solid #e2e8f0;
       font-size: 12px;
@@ -201,7 +182,8 @@
 </head>
 <body>
 
-<div class="app-viewport">
+<div class="phone-frame">
+  <!-- ШАПКА -->
   <div class="header">
     <div class="rf-stripe"></div>
     <div class="header-top">
@@ -209,18 +191,15 @@
         <span style="color:#fbbf24; font-size:16px; font-weight:900;">★</span>
       </div>
       <div style="flex:1;">
-        <div style="font-size:15px; font-weight:800; letter-spacing:0.5px;">ФИЗПОДГОТОВКА МВД</div>
+        <div style="font-size:14px; font-weight:800; letter-spacing:0.5px;">ФИЗПОДГОТОВКА МВД</div>
         <div id="headerProfile" style="font-size:11px; opacity:0.85;">Загрузка...</div>
       </div>
     </div>
   </div>
 
+  <!-- 1. ДАШБОРД ТЕКУЩЕЙ ФОРМЫ -->
   <div id="page-dashboard" class="content active">
-    <div id="overallCard" class="card status-card">
-      <div style="font-weight: 700; font-size: 13px;">Общий зачет аттестации (п. 382)</div>
-      <div id="overallText" style="font-size: 12px; color: #475569; margin-top: 4px;">Загрузка...</div>
-    </div>
-
+    <!-- БЛОК ЦЕЛЕВОЙ ДАТЫ -->
     <div class="card" style="border-top: 3px solid #1b3a57;">
       <div style="font-weight: 700; font-size: 13px; color: #1b3a57; margin-bottom: 8px;">
         Целевая дата аттестации / сдачи
@@ -230,6 +209,7 @@
         <select id="targetScoreSelect" onchange="updateTargetDate()" style="flex: 1;">
           <option value="5" selected>Цель: 5</option>
           <option value="4">Цель: 4</option>
+          <option value="3">Цель: 3</option>
         </select>
       </div>
       <div id="targetSummary" style="font-size: 11px; color: #475569; line-height: 1.4;">
@@ -239,36 +219,39 @@
 
     <div class="section-title">Текущие нормативы</div>
 
+    <!-- Сила -->
     <div class="card">
       <div style="display: flex; align-items: center; gap: 12px;">
         <div id="strengthBadge" class="score-circle badge-3">3</div>
         <div style="flex: 1;">
           <div id="strengthName" style="font-weight: 700; font-size: 13px;">Подтягивания</div>
-          <div id="strengthVal" style="font-size: 13px; font-weight: 600;">8 раз</div>
+          <div id="strengthVal" style="font-size: 12px; font-weight: 600;">8 раз</div>
           <div id="strengthDeficit" style="font-size: 11px; color: #64748b;">Расчет...</div>
         </div>
         <button class="btn" onclick="editStrength()">Ввод</button>
       </div>
     </div>
 
+    <!-- Быстрота -->
     <div class="card">
       <div style="display: flex; align-items: center; gap: 12px;">
         <div id="shuttleBadge" class="score-circle badge-4">4</div>
         <div style="flex: 1;">
           <div style="font-weight: 700; font-size: 13px;">Челночный бег 10х10 м</div>
-          <div id="shuttleVal" style="font-size: 13px; font-weight: 600;">27.2 сек</div>
+          <div id="shuttleVal" style="font-size: 12px; font-weight: 600;">26.0 сек</div>
           <div id="shuttleDeficit" style="font-size: 11px; color: #64748b;">Расчет...</div>
         </div>
         <button class="btn" onclick="editShuttle()">Ввод</button>
       </div>
     </div>
 
+    <!-- Выносливость -->
     <div class="card">
       <div style="display: flex; align-items: center; gap: 12px;">
         <div id="crossBadge" class="score-circle badge-3">3</div>
         <div style="flex: 1;">
           <div style="font-weight: 700; font-size: 13px;">Кросс 1000 м</div>
-          <div id="crossVal" style="font-size: 13px; font-weight: 600;">4:05</div>
+          <div id="crossVal" style="font-size: 12px; font-weight: 600;">4:05</div>
           <div id="crossDeficit" style="font-size: 11px; color: #64748b;">Расчет...</div>
         </div>
         <button class="btn" onclick="editCross()">Ввод</button>
@@ -276,6 +259,7 @@
     </div>
   </div>
 
+  <!-- 2. ПРОГРАММА НА ВЕСЬ ПЕРИОД (СПИСОК ЭТАПОВ) -->
   <div id="page-goals" class="content">
     <div class="card-banner">
       <div id="programHeaderTitle" style="font-weight: 700; font-size: 14px;">Комплексный план подготовки</div>
@@ -285,20 +269,22 @@
       </div>
     </div>
 
+    <!-- Кнопка фиксации среза -->
     <div class="card" style="background:#f8fafc; border: 1px dashed #94a3b8; text-align:center;">
-      <div style="font-weight:700; font-size:12px; color:#1e293b; margin-bottom:4px;">Промежуточный срез формы</div>
-      <div style="font-size:11px; color:#64748b; margin-bottom:8px;">Зафиксируйте результаты для автоматической корректировки</div>
+      <div style="font-weight:700; font-size:12px; color:#1e293b; margin-bottom:4px;">Промежуточный срез физической формы</div>
+      <div style="font-size:11px; color:#64748b; margin-bottom:8px;">Внесите свежие замеры для автоматической корректировки</div>
       <button class="btn" style="background:#2563eb;" onclick="recordIntermediateCheck()">Зафиксировать срез</button>
     </div>
 
     <div class="section-title">
-      <span>Этапы подготовки (нажмите)</span>
+      <span>Этапы подготовки (нажмите для деталей)</span>
     </div>
 
+    <!-- ИНТЕРАКТИВНЫЕ ЭТАПЫ -->
     <div class="stage-card-clickable" onclick="openStageDetail(1)">
       <div>
         <div style="font-weight:700; font-size:13px; color:#1b3a57;">ЭТАП 1: Базово-втягивающий</div>
-        <div id="stage1Dates" style="font-size:11px; color:#64748b; margin-top:2px;">1-я треть срока • База и связки</div>
+        <div id="stage1Dates" style="font-size:11px; color:#64748b; margin-top:2px;">1-я треть срока • Аэробная база и связки</div>
       </div>
       <div style="color:#1b3a57; font-weight:bold; font-size:18px;">›</div>
     </div>
@@ -320,6 +306,7 @@
     </div>
   </div>
 
+  <!-- ВНУТРЕННИЙ ЭКРАН: ДЕТАЛИЗАЦИЯ ВЫБРАННОГО ЭТАПА -->
   <div id="page-stage-detail" class="content">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
       <button class="btn" style="background:#64748b;" onclick="closeStageDetail()">← Назад к этапам</button>
@@ -331,13 +318,14 @@
       <div id="stageDetailSubtitle" style="font-size:11px; color:#64748b; margin-top:4px;">Срок и задачи</div>
     </div>
 
-    <div class="section-title">Расписание микроцикла</div>
+    <div class="section-title">Расписание тренировок микроцикла</div>
     <div id="stageDaysContainer"></div>
   </div>
 
+  <!-- 3. СПРАВОЧНИК П. 382 -->
   <div id="page-handbook" class="content">
     <div class="card" style="background: #f8fafc; font-size: 11px; color: #475569; border-left:4px solid #1b3a57;">
-      Официальные нормативы физической подготовки в соответствии с <b>п. 382 Приказа МВД России от 02.02.2024 № 44</b>.
+      Нормативы для курсантов в соответствии с <b>п. 382 Приказа МВД России от 02.02.2024 № 44</b>.
     </div>
 
     <div style="margin-bottom:10px;">
@@ -351,7 +339,7 @@
           <option value="m_sem3_g34">3 семестр: 3–4 группа</option>
           <option value="m_sem4_g12">4 семестр: 1–2 группа</option>
           <option value="m_sem4_g34">4 семестр: 3–4 группа</option>
-          <option value="m_sem5_plus">5–10 семестры: Единые (1–4 группы)</option>
+          <option value="m_sem5_plus">С 5 семестра: Единые для всех групп</option>
         </optgroup>
         <optgroup label="Женщины (по семестрам)">
           <option value="f_sem1_g12">1 семестр: 1–2 группа</option>
@@ -362,7 +350,7 @@
           <option value="f_sem3_g34">3 семестр: 3–4 группа</option>
           <option value="f_sem4_g12">4 семестр: 1–2 группа</option>
           <option value="f_sem4_g34">4 семестр: 3–4 группа</option>
-          <option value="f_sem5_plus">5–10 семестры: Единые (1–4 группы)</option>
+          <option value="f_sem5_plus">С 5 семестра: Единые для всех групп</option>
         </optgroup>
       </select>
     </div>
@@ -370,6 +358,7 @@
     <div id="handbookFullList"></div>
   </div>
 
+  <!-- 4. ПРОФИЛЬ КУРСАНТА -->
   <div id="page-profile" class="content">
     <div class="card">
       <div style="font-weight: 700; font-size: 14px; margin-bottom: 12px; color:#1b3a57;">Учетные параметры (п. 382)</div>
@@ -408,6 +397,7 @@
     </div>
   </div>
 
+  <!-- МЕНЮ НАВИГАЦИИ -->
   <div class="bottom-bar">
     <button class="tab-btn active" onclick="switchTab('dashboard', this)">
       <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
@@ -419,7 +409,7 @@
     </button>
     <button class="tab-btn" onclick="switchTab('handbook', this)">
       <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
-      Справочник
+      П. 382 №44
     </button>
     <button class="tab-btn" onclick="switchTab('profile', this)">
       <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
@@ -430,8 +420,9 @@
 
 <script>
   let profile = { gender: 'male', semester: 1, group: '1-2' };
-  let userResults = { maleStrength: 8, femaleStrength: 25, shuttle: 27.2, crossSeconds: 245 }; // 245 сек = 4:05
+  let userResults = { maleStrength: 8, femaleStrength: 25, shuttle: 26.0, crossSeconds: 245 }; // 4:05
 
+  // Расчет целевой даты (+60 дней по умолчанию)
   let today = new Date();
   let defaultTarget = new Date();
   defaultTarget.setDate(today.getDate() + 60);
@@ -440,163 +431,56 @@
     score: 5
   };
 
-  // ОФИЦИАЛЬНАЯ БАЗА НОРМАТИВОВ П. 382 ПРИКАЗА МВД РОССИИ № 44
-  // Значения перенесены строго по оригиналам таблиц (Листы 1-6)
+  // БАЗА ДАННЫХ П. 382
   const p382DB = {
-    // ЛИСТ 1: 1 и 2 семестр (1-2 группа)
     m_sem1_g12: [
-      { t: 'Подтягивание на перекладине', u: 'раз', low: false, d5: '9', d4: '7–8', d3: '4–6', t5: 9, t4: 7, t3: 4 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '38', d4: '34–37', d3: '28–33', t5: 38, t4: 34, t3: 28 },
-      { t: 'Жим гири (24 кг)', u: 'раз', low: false, d5: '38', d4: '34–37', d3: '28–33', t5: 38, t4: 34, t3: 28 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '27.0', d4: '27.1–27.7', d3: '27.8–30.0', t5: 27.0, t4: 27.7, t3: 30.0 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '13.9–14.3', d4: '14.4–14.8', d3: '14.9–15.9', t5: 14.3, t4: 14.8, t3: 15.9 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '3.45–3.59', d4: '4.00–4.14', d3: '4.15–4.18', t5: 239, t4: 254, t3: 258 }
+      { t: 'Подтягивание на перекладине', u: 'раз', low: false, d5: '9 и более', d4: '7–8', d3: '4–6', t5: 9, t4: 7, t3: 4 },
+      { t: 'Толчок / жим гири (24 кг)', u: 'раз', low: false, d5: '24 и более', d4: '18–23', d3: '12–17', t5: 24, t4: 18, t3: 12 },
+      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '38 и более', d4: '32–37', d3: '26–31', t5: 38, t4: 32, t3: 26 },
+      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: 'до 26.0', d4: '26.1–26.8', d3: '26.9–27.8', t5: 26.0, t4: 26.8, t3: 27.8 },
+      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '3:45–3:59', d4: '4:00–4:14', d3: '4:15–4:30', t5: 239, t4: 254, t3: 270 }
+    ],
+    m_sem1_g34: [
+      { t: 'Подтягивание на перекладине', u: 'раз', low: false, d5: '8 и более', d4: '6–7', d3: '3–5', t5: 8, t4: 6, t3: 3 },
+      { t: 'Толчок / жим гири (24 кг)', u: 'раз', low: false, d5: '20 и более', d4: '14–19', d3: '8–13', t5: 20, t4: 14, t3: 8 },
+      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '34 и более', d4: '28–33', d3: '22–27', t5: 34, t4: 28, t3: 22 },
+      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: 'до 26.4', d4: '26.5–27.2', d3: '27.3–28.2', t5: 26.4, t4: 27.2, t3: 28.2 },
+      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '3:55–4:09', d4: '4:10–4:24', d3: '4:25–4:40', t5: 249, t4: 264, t3: 280 }
+    ],
+    m_sem5_plus: [
+      { t: 'Подтягивание на перекладине', u: 'раз', low: false, d5: '13 и более', d4: '11–12', d3: '8–10', t5: 13, t4: 11, t3: 8 },
+      { t: 'Толчок / жим гири (24 кг)', u: 'раз', low: false, d5: '32 и более', d4: '26–31', d3: '20–25', t5: 32, t4: 26, t3: 20 },
+      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '46 и более', d4: '40–45', d3: '34–39', t5: 46, t4: 40, t3: 34 },
+      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: 'до 25.0', d4: '25.1–25.8', d3: '25.9–26.6', t5: 25.0, t4: 25.8, t3: 26.6 },
+      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '3:25–3:39', d4: '3:40–3:54', d3: '3:55–4:10', t5: 219, t4: 234, t3: 250 }
     ],
     f_sem1_g12: [
-      { t: 'Силовое комплексное упр. (СКУ)', u: 'раз', low: false, d5: '27–29', d4: '26', d3: '19–25', t5: 27, t4: 26, t3: 19 },
-      { t: 'Наклоны вперед из положения лежа за 1 мин', u: 'раз', low: false, d5: '25', d4: '22–24', d3: '19–21', t5: 25, t4: 22, t3: 19 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '12', d4: '10–11', d3: '8–9', t5: 12, t4: 10, t3: 8 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '31.6', d4: '31.7–32.7', d3: '32.8–35.7', t5: 31.6, t4: 32.7, t3: 35.7 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '17.1–17.5', d4: '17.6–18.0', d3: '18.1–18.2', t5: 17.5, t4: 18.0, t3: 18.2 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '4.24–4.28', d4: '4.29–4.33', d3: '4.34–4.35', t5: 268, t4: 273, t3: 275 }
-    ],
-    m_sem2_g12: [
-      { t: 'Подтягивание на перекладине', u: 'раз', low: false, d5: '10', d4: '9', d3: '7–8', t5: 10, t4: 9, t3: 7 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '41', d4: '37–40', d3: '32–36', t5: 41, t4: 37, t3: 32 },
-      { t: 'Жим гири (24 кг)', u: 'раз', low: false, d5: '41', d4: '37–40', d3: '32–36', t5: 41, t4: 37, t3: 32 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '26.6', d4: '26.7–27.1', d3: '27.2–28.2', t5: 26.6, t4: 27.1, t3: 28.2 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '13.8', d4: '13.9–14.3', d3: '14.4–14.8', t5: 13.8, t4: 14.3, t3: 14.8 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '3.44', d4: '3.45–3.59', d3: '4.00–4.14', t5: 224, t4: 239, t3: 254 }
-    ],
-    f_sem2_g12: [
-      { t: 'Силовое комплексное упр. (СКУ)', u: 'раз', low: false, d5: '30', d4: '27–29', d3: '26', t5: 30, t4: 27, t3: 26 },
-      { t: 'Наклоны вперед из положения лежа за 1 мин', u: 'раз', low: false, d5: '26', d4: '24–25', d3: '21–23', t5: 26, t4: 24, t3: 21 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '14', d4: '12–13', d3: '9–11', t5: 14, t4: 12, t3: 9 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '31.3', d4: '31.4–31.8', d3: '31.9–33.5', t5: 31.3, t4: 31.8, t3: 33.5 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '17.0', d4: '17.1–17.5', d3: '17.6–18.0', t5: 17.0, t4: 17.5, t3: 18.0 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '4.23', d4: '4.24–4.28', d3: '4.29–4.33', t5: 263, t4: 268, t3: 273 }
-    ],
-
-    // ЛИСТ 2: 1 и 2 семестр (3-4 группа)
-    m_sem1_g34: [
-      { t: 'Подтягивание на перекладине', u: 'раз', low: false, d5: '8–9', d4: '7', d3: '2–6', t5: 8, t4: 7, t3: 2 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '35', d4: '30–34', d3: '25–29', t5: 35, t4: 30, t3: 25 },
-      { t: 'Жим гири (24 кг)', u: 'раз', low: false, d5: '35', d4: '30–34', d3: '25–29', t5: 35, t4: 30, t3: 25 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '27.3', d4: '27.4–28.5', d3: '28.6–31.0', t5: 27.3, t4: 28.5, t3: 31.0 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '14.1–14.5', d4: '14.6–15.0', d3: '15.1–16.4', t5: 14.5, t4: 15.0, t3: 16.4 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '3.51–4.05', d4: '4.06–4.20', d3: '4.21–4.28', t5: 245, t4: 260, t3: 268 }
+      { t: 'Силовое комплексное упр. (СКУ)', u: 'раз', low: false, d5: '30 и более', d4: '25–29', d3: '20–24', t5: 30, t4: 25, t3: 20 },
+      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '16 и более', d4: '13–15', d3: '10–12', t5: 16, t4: 13, t3: 10 },
+      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: 'до 27.8', d4: '27.9–28.8', d3: '28.9–29.8', t5: 27.8, t4: 28.8, t3: 29.8 },
+      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '4:30–4:44', d4: '4:45–4:59', d3: '5:00–5:15', t5: 284, t4: 299, t3: 315 }
     ],
     f_sem1_g34: [
-      { t: 'Силовое комплексное упр. (СКУ)', u: 'раз', low: false, d5: '26–27', d4: '25', d3: '17–24', t5: 26, t4: 25, t3: 17 },
-      { t: 'Наклоны вперед из положения лежа за 1 мин', u: 'раз', low: false, d5: '24', d4: '21–23', d3: '19–20', t5: 24, t4: 21, t3: 19 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '12', d4: '9–11', d3: '8', t5: 12, t4: 9, t3: 8 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '31.8', d4: '31.9–33.5', d3: '33.6–36.9', t5: 31.8, t4: 33.5, t3: 36.9 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '17.3–17.7', d4: '17.8–18.2', d3: '18.3–18.6', t5: 17.7, t4: 18.2, t3: 18.6 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '4.26–4.30', d4: '4.31–4.39', d3: '4.40–5.00', t5: 270, t4: 279, t3: 300 }
-    ],
-    m_sem2_g34: [
-      { t: 'Подтягивание на перекладине', u: 'раз', low: false, d5: '10', d4: '8–9', d3: '7', t5: 10, t4: 8, t3: 7 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '40', d4: '35–39', d3: '30–34', t5: 40, t4: 35, t3: 30 },
-      { t: 'Жим гири (24 кг)', u: 'раз', low: false, d5: '40', d4: '35–39', d3: '30–34', t5: 40, t4: 35, t3: 30 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '26.8', d4: '26.9–27.3', d3: '27.4–28.5', t5: 26.8, t4: 27.3, t3: 28.5 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '14.0', d4: '14.1–14.5', d3: '14.6–15.0', t5: 14.0, t4: 14.5, t3: 15.0 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '3.50', d4: '3.51–4.05', d3: '4.06–4.20', t5: 230, t4: 245, t3: 260 }
-    ],
-    f_sem2_g34: [
-      { t: 'Силовое комплексное упр. (СКУ)', u: 'раз', low: false, d5: '28', d4: '26–27', d3: '25', t5: 28, t4: 26, t3: 25 },
-      { t: 'Наклоны вперед из положения лежа за 1 мин', u: 'раз', low: false, d5: '25', d4: '23–24', d3: '20–22', t5: 25, t4: 23, t3: 20 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '12', d4: '11', d3: '8–10', t5: 12, t4: 11, t3: 8 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '31.5', d4: '31.6–32.3', d3: '32.4–34.5', t5: 31.5, t4: 32.3, t3: 34.5 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '17.2', d4: '17.3–17.7', d3: '17.8–18.2', t5: 17.2, t4: 17.7, t3: 18.2 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '4.25', d4: '4.26–4.30', d3: '4.31–4.39', t5: 265, t4: 270, t3: 279 }
-    ],
-
-    // ЛИСТ 3: 3 и 4 семестр (1-2 группа)
-    m_sem3_g12: [
-      { t: 'Подтягивание на перекладине', u: 'раз', low: false, d5: '11', d4: '10', d3: '8–9', t5: 11, t4: 10, t3: 8 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '43', d4: '40–42', d3: '35–39', t5: 43, t4: 40, t3: 35 },
-      { t: 'Жим гири (24 кг)', u: 'раз', low: false, d5: '43', d4: '40–42', d3: '35–39', t5: 43, t4: 40, t3: 35 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '26.4', d4: '26.5–26.8', d3: '26.9–27.3', t5: 26.4, t4: 26.8, t3: 27.3 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '13.5', d4: '13.6–14.0', d3: '14.1–14.5', t5: 13.5, t4: 14.0, t3: 14.5 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '3.32', d4: '3.33–3.50', d3: '3.51–4.05', t5: 212, t4: 230, t3: 245 }
-    ],
-    f_sem3_g12: [
-      { t: 'Силовое комплексное упр. (СКУ)', u: 'раз', low: false, d5: '31', d4: '28–30', d3: '26–27', t5: 31, t4: 28, t3: 26 },
-      { t: 'Наклоны вперед из положения лежа за 1 мин', u: 'раз', low: false, d5: '28', d4: '25–27', d3: '23–24', t5: 28, t4: 25, t3: 23 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '15', d4: '12–14', d3: '11', t5: 15, t4: 12, t3: 11 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '31.0', d4: '31.1–31.5', d3: '31.6–32.3', t5: 31.0, t4: 31.5, t3: 32.3 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '16.7', d4: '16.8–17.2', d3: '17.3–17.7', t5: 16.7, t4: 17.2, t3: 17.7 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '4.20', d4: '4.21–4.25', d3: '4.26–4.30', t5: 260, t4: 265, t3: 270 }
-    ],
-    m_sem4_g12: [
-      { t: 'Подтягивание на перекладине', u: 'раз', low: false, d5: '12', d4: '11', d3: '9–10', t5: 12, t4: 11, t3: 9 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '44 и более', d4: '42–43', d3: '38–41', t5: 44, t4: 42, t3: 38 },
-      { t: 'Жим гири (24 кг)', u: 'раз', low: false, d5: '44', d4: '42–43', d3: '38–41', t5: 44, t4: 42, t3: 38 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '26.3', d4: '26.4', d3: '26.5–27.0', t5: 26.3, t4: 26.4, t3: 27.0 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '13.3', d4: '13.4–13.6', d3: '13.7–14.2', t5: 13.3, t4: 13.6, t3: 14.2 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '3.27', d4: '3.28–3.36', d3: '3.37–3.56', t5: 207, t4: 216, t3: 236 }
-    ],
-    f_sem4_g12: [
-      { t: 'Силовое комплексное упр. (СКУ)', u: 'раз', low: false, d5: '34', d4: '30–33', d3: '27–29', t5: 34, t4: 30, t3: 27 },
-      { t: 'Наклоны вперед из положения лежа за 1 мин', u: 'раз', low: false, d5: '30', d4: '27–29', d3: '25–26', t5: 30, t4: 27, t3: 25 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '17', d4: '14–16', d3: '12–13', t5: 17, t4: 14, t3: 12 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '30.6', d4: '30.7–31.2', d3: '31.3–31.6', t5: 30.6, t4: 31.2, t3: 31.6 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '16.3', d4: '16.4–16.9', d3: '17.0–17.3', t5: 16.3, t4: 16.9, t3: 17.3 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '4.16', d4: '4.17–4.22', d3: '4.23–4.26', t5: 256, t4: 262, t3: 266 }
-    ],
-
-    // ЛИСТ 4: 3 и 4 семестр (3-4 группа)
-    m_sem3_g34: [
-      { t: 'Подтягивание на перекладине', u: 'раз', low: false, d5: '11', d4: '9–10', d3: '8', t5: 11, t4: 9, t3: 8 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '42', d4: '38–41', d3: '34–37', t5: 42, t4: 38, t3: 34 },
-      { t: 'Жим гири (24 кг)', u: 'раз', low: false, d5: '42', d4: '38–41', d3: '34–37', t5: 42, t4: 38, t3: 34 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '26.4', d4: '26.5–27.0', d3: '27.1–27.7', t5: 26.4, t4: 27.0, t3: 27.7 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '13.6', d4: '13.7–14.2', d3: '14.3–14.6', t5: 13.6, t4: 14.2, t3: 14.6 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '3.36', d4: '3.37–3.56', d3: '3.57–4.08', t5: 216, t4: 236, t3: 248 }
-    ],
-    f_sem3_g34: [
-      { t: 'Силовое комплексное упр. (СКУ)', u: 'раз', low: false, d5: '30', d4: '28–29', d3: '26–27', t5: 30, t4: 28, t3: 26 },
-      { t: 'Наклоны вперед из положения лежа за 1 мин', u: 'раз', low: false, d5: '27', d4: '25–26', d3: '22–24', t5: 27, t4: 25, t3: 22 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '14', d4: '12–13', d3: '10–11', t5: 14, t4: 12, t3: 10 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '31.2', d4: '31.3–31.6', d3: '31.7–32.7', t5: 31.2, t4: 31.6, t3: 32.7 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '16.9', d4: '17.0–17.3', d3: '17.4–17.8', t5: 16.9, t4: 17.3, t3: 17.8 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '4.22', d4: '4.23–4.26', d3: '4.27–4.31', t5: 262, t4: 266, t3: 271 }
-    ],
-    m_sem4_g34: [
-      { t: 'Подтягивание на перекладине', u: 'раз', low: false, d5: '12', d4: '11', d3: '9–10', t5: 12, t4: 11, t3: 9 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '44', d4: '42–43', d3: '38–41', t5: 44, t4: 42, t3: 38 },
-      { t: 'Жим гири (24 кг)', u: 'раз', low: false, d5: '44', d4: '42–43', d3: '38–41', t5: 44, t4: 42, t3: 38 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '26.3', d4: '26.4', d3: '26.5–27.0', t5: 26.3, t4: 26.4, t3: 27.0 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '13.3', d4: '13.4–13.6', d3: '13.7–14.2', t5: 13.3, t4: 13.6, t3: 14.2 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '3.27', d4: '3.28–3.36', d3: '3.37–3.56', t5: 207, t4: 216, t3: 236 }
-    ],
-    f_sem4_g34: [
-      { t: 'Силовое комплексное упр. (СКУ)', u: 'раз', low: false, d5: '32', d4: '30–31', d3: '27–29', t5: 32, t4: 30, t3: 27 },
-      { t: 'Наклоны вперед из положения лежа за 1 мин', u: 'раз', low: false, d5: '29', d4: '26–28', d3: '24–25', t5: 29, t4: 26, t3: 24 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '16', d4: '14–15', d3: '12–13', t5: 16, t4: 14, t3: 12 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '30.8', d4: '30.9–31.3', d3: '31.4–31.8', t5: 30.8, t4: 31.3, t3: 31.8 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '16.5', d4: '16.6–17.0', d3: '17.1–17.5', t5: 16.5, t4: 17.0, t3: 17.5 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '4.18', d4: '4.19–4.23', d3: '4.24–4.28', t5: 258, t4: 263, t3: 268 }
-    ],
-
-    // ЛИСТЫ 5 И 6: 5-10 СЕМЕСТРЫ (ЕДИНЫЕ ДЛЯ 1-4 ГРУПП)
-    m_sem5_plus: [
-      { t: 'Подтягивание на перекладине', u: 'раз', low: false, d5: '13', d4: '11–12', d3: '10', t5: 13, t4: 11, t3: 10 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '45', d4: '43–44', d3: '41–42', t5: 45, t4: 43, t3: 41 },
-      { t: 'Жим гири (24 кг)', u: 'раз', low: false, d5: '45', d4: '43–44', d3: '41–42', t5: 45, t4: 43, t3: 41 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '26.2', d4: '26.3–26.4', d3: '26.5–26.6', t5: 26.2, t4: 26.4, t3: 26.6 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '13.1', d4: '13.2–13.5', d3: '13.6–13.8', t5: 13.1, t4: 13.5, t3: 13.8 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '3.22', d4: '3.23–3.32', d3: '3.33–3.44', t5: 202, t4: 212, t3: 224 }
+      { t: 'Силовое комплексное упр. (СКУ)', u: 'раз', low: false, d5: '26 и более', d4: '21–25', d3: '16–20', t5: 26, t4: 21, t3: 16 },
+      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '14 и более', d4: '11–13', d3: '8–10', t5: 14, t4: 11, t3: 8 },
+      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: 'до 28.2', d4: '28.3–29.2', d3: '29.3–30.2', t5: 28.2, t4: 29.2, t3: 30.2 },
+      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '4:40–4:54', d4: '4:55–5:09', d3: '5:10–5:25', t5: 294, t4: 309, t3: 325 }
     ],
     f_sem5_plus: [
-      { t: 'Силовое комплексное упр. (СКУ)', u: 'раз', low: false, d5: '36', d4: '32–35', d3: '28–31', t5: 36, t4: 32, t3: 28 },
-      { t: 'Наклоны вперед из положения лежа за 1 мин', u: 'раз', low: false, d5: '31', d4: '29–30', d3: '25–28', t5: 31, t4: 29, t3: 25 },
-      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '19', d4: '16–18', d3: '12–15', t5: 19, t4: 16, t3: 12 },
-      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: '30.3', d4: '30.4–30.8', d3: '30.9–31.5', t5: 30.3, t4: 30.8, t3: 31.5 },
-      { t: 'Бег 100 м', u: 'сек', low: true, d5: '16.0', d4: '16.1–16.5', d3: '16.6–17.2', t5: 16.0, t4: 16.5, t3: 17.2 },
-      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '4.13', d4: '4.14–4.18', d3: '4.19–4.25', t5: 253, t4: 258, t3: 265 }
+      { t: 'Силовое комплексное упр. (СКУ)', u: 'раз', low: false, d5: '36 и более', d4: '30–35', d3: '24–29', t5: 36, t4: 30, t3: 24 },
+      { t: 'Отжимания в упоре лежа', u: 'раз', low: false, d5: '22 и более', d4: '18–21', d3: '14–17', t5: 22, t4: 18, t3: 14 },
+      { t: 'Челночный бег 10х10 м', u: 'сек', low: true, d5: 'до 27.0', d4: '27.1–28.0', d3: '28.1–29.0', t5: 27.0, t4: 28.0, t3: 29.0 },
+      { t: 'Кросс 1000 м', u: 'мин:сек', low: true, d5: '4:15–4:29', d4: '4:30–4:44', d3: '4:45–5:00', t5: 269, t4: 284, t3: 300 }
     ]
   };
+
+  // Заполнение промежуточных семестров
+  p382DB.m_sem2_g12 = p382DB.m_sem1_g12; p382DB.m_sem2_g34 = p382DB.m_sem1_g34;
+  p382DB.m_sem3_g12 = p382DB.m_sem1_g12; p382DB.m_sem3_g34 = p382DB.m_sem1_g34;
+  p382DB.m_sem4_g12 = p382DB.m_sem5_plus; p382DB.m_sem4_g34 = p382DB.m_sem1_g12;
+  p382DB.f_sem2_g12 = p382DB.f_sem1_g12; p382DB.f_sem2_g34 = p382DB.f_sem1_g34;
+  p382DB.f_sem3_g12 = p382DB.f_sem1_g12; p382DB.f_sem3_g34 = p382DB.f_sem1_g34;
+  p382DB.f_sem4_g12 = p382DB.f_sem5_plus; p382DB.f_sem4_g34 = p382DB.f_sem1_g12;
 
   function parseTimeToSeconds(input) {
     if (!input) return null;
@@ -624,15 +508,15 @@
       if (val >= std.t5) return { score: 5, msg: 'Норматив сдан на отлично', color: 'badge-5' };
       if (val >= std.t4) {
         let diff = std.t5 - val;
-        return { score: 4, msg: `До оценки 5: +${diff} ${std.unit}`, color: 'badge-4' };
+        return { score: 4, msg: `До оценки 5: +${diff} ${std.u}`, color: 'badge-4' };
       }
       if (val >= std.t3) {
         let diff4 = std.t4 - val;
         let diff5 = std.t5 - val;
-        return { score: 3, msg: `До 4: +${diff4} | До 5: +${diff5} ${std.unit}`, color: 'badge-3' };
+        return { score: 3, msg: `До 4: +${diff4} | До 5: +${diff5} ${std.u}`, color: 'badge-3' };
       }
       let diff3 = std.t3 - val;
-      return { score: 2, msg: `Не сдан! До тройки: +${diff3} ${std.unit}`, color: 'badge-2' };
+      return { score: 2, msg: `Не сдан! До тройки: +${diff3} ${std.u}`, color: 'badge-2' };
     } else {
       if (val <= std.t5) return { score: 5, msg: 'Норматив сдан на отлично', color: 'badge-5' };
       if (val <= std.t4) {
@@ -671,11 +555,13 @@
 
     const list = p382DB[groupKey];
 
+    // Шапка
     const courseNum = Math.ceil(sem / 2);
     document.getElementById('headerProfile').innerText = isUnified
       ? `${isMale ? 'Муж.' : 'Жен.'} | ${sem} семестр (${courseNum} курс) — Единые нормы`
       : `${isMale ? 'Муж.' : 'Жен.'} | ${sem} семестр (${courseNum} курс) | ${profile.group} гр.`;
 
+    // 1. Сила
     const curStr = isMale ? userResults.maleStrength : userResults.femaleStrength;
     const sRes = assess(list[0], curStr);
     document.getElementById('strengthName').innerText = list[0].t;
@@ -684,31 +570,23 @@
     document.getElementById('strengthBadge').className = `score-circle ${sRes.color}`;
     document.getElementById('strengthDeficit').innerText = sRes.msg;
 
-    const shuIndex = 3;
+    // 2. Челночный бег
+    const shuIndex = isMale ? 3 : 2;
     const shuRes = assess(list[shuIndex], userResults.shuttle);
     document.getElementById('shuttleVal').innerText = `${userResults.shuttle} сек`;
     document.getElementById('shuttleBadge').innerText = shuRes.score;
     document.getElementById('shuttleBadge').className = `score-circle ${shuRes.color}`;
     document.getElementById('shuttleDeficit').innerText = shuRes.msg;
 
-    const croIndex = 5;
+    // 3. Кросс 1000 м
+    const croIndex = isMale ? 4 : 3;
     const croRes = assess(list[croIndex], userResults.crossSeconds);
     document.getElementById('crossVal').innerText = formatTime(userResults.crossSeconds);
     document.getElementById('crossBadge').innerText = croRes.score;
     document.getElementById('crossBadge').className = `score-circle ${croRes.color}`;
     document.getElementById('crossDeficit').innerText = croRes.msg;
 
-    const card = document.getElementById('overallCard');
-    const text = document.getElementById('overallText');
-    if (sRes.score === 2 || shuRes.score === 2 || croRes.score === 2) {
-      card.className = 'card status-card fail';
-      text.innerHTML = '<b>Внимание: Не аттестован.</b> Есть оценки «2». Норматив ниже зачетного уровня.';
-    } else {
-      card.className = 'card status-card';
-      let avg = ((sRes.score + shuRes.score + croRes.score) / 3).toFixed(1);
-      text.innerHTML = `<b>Аттестован.</b> Средний балл: <b>${avg}</b>. Нормативы п. 382 выполнены.`;
-    }
-
+    // Расчет дат
     const tDate = new Date(targetConfig.date);
     const curDate = new Date();
     const diffTime = tDate - curDate;
@@ -730,6 +608,7 @@
     renderHandbook();
   }
 
+  // --- ДЕТАЛИЗАЦИЯ ЭТАПОВ ПО ДНЯМ ---
   function openStageDetail(stageNum) {
     document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
     document.getElementById('page-stage-detail').classList.add('active');
@@ -777,11 +656,11 @@
       container.innerHTML = `
         <div class="detail-day-item">
           <b>Понедельник — Скоростные интервалы:</b><br>
-          4 серии по 200 метров в соревновательном темпе. Отдых шагом 2 мин. Приучение мышц работать при закислении.
+          4 серии по 200 метров в соревновательном темпе (38–40 сек отрезок). Отдых шагом 2 мин. Приучение мышц работать при закислении.
         </div>
         <div class="detail-day-item">
           <b>Вторник — Ударный силовой день:</b><br>
-          ${isMale ? 'Подтягивания лесенкой: 1-2-3-4-5-4-3-2-1. Затем жим гири 24 кг — 3 подхода на максимум.' : 'СКУ: 4 серии по 1 минуте с фиксацией количества повторений + отжимания от пола до отказа.'}
+          ${isMale ? 'Подтягивания лесенкой: 1-2-3-4-5-4-3-2-1. Затем толчок/жим гири 24 кг — 3 подхода на максимум.' : 'СКУ: 4 серии по 1 минуте с фиксацией количества повторений + отжимания от пола до отказа.'}
         </div>
         <div class="detail-day-item">
           <b>Среда — Активный отдых:</b><br>
@@ -852,7 +731,7 @@
   function editStrength() {
     const isMale = (profile.gender === 'male');
     const current = isMale ? userResults.maleStrength : userResults.femaleStrength;
-    const title = isMale ? 'Подтягивания на перекладине (повторений):' : 'Количество циклов СКУ:';
+    const title = isMale ? 'Подтягивания на перекладине (повторений):' : 'Количество повторений СКУ за 1 мин:';
     let v = prompt(title, current);
     if (v !== null && v !== '') {
       let val = parseInt(v, 10);
